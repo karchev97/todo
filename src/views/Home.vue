@@ -1,7 +1,7 @@
 <template>
   <div class="todo-container">
     <Note 
-      v-for="todo in todos"  
+      v-for="todo in notes"  
       :key="todo.id"
       :id="todo.id"
       :title="todo.title"
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Note from '../components/note'
+import Note from '../components/Note'
 
 export default {
   components: {
@@ -29,44 +29,18 @@ export default {
     return {
       accept: false,
       itemId: undefined,
-      todos: [
-        {
-          id: 0,
-          title: 'Мой план на текущий день',
-          items: [
-            {id:0, ready: true, text: 'Заниматься спортом 1.5 часа'},
-            {id:1, ready: true, text: 'Прочитать 10 страниц книги'},
-            {id:2, ready: false, text: 'Питаться только полезной пищей'},
-            {id:3, ready: true, text: 'Играть на гитаре 5 часов в день'}
-          ]
-        },
-        {
-          id: 1,
-          title: 'Мой план 16/03/2020',
-          items: [
-            {id:0, ready: true, text: 'Заниматься спортом 1.5 часа'},
-            {id:1, ready: true, text: 'Прочитать 10 страниц книги'},
-            {id:2, ready: false, text: 'Питаться только полезной пищей'},
-          ]
-        },
-        {
-          id: 2,
-          title: 'Мой план 26/03/202',
-          items: [
-            {id:0, ready: true, text: 'Заниматься спортом 1.5 часа'},
-            {id:2, ready: false, text: 'Питаться только полезной пищей'},
-            {id:3, ready: true, text: 'Играть на гитаре 5 часов в день'}
-          ]
-        }
-      ],
+      notes: [],
     }
   },
   methods: {
     // Удаление заметки
     deleteItem: function(id) {
       if(this.accept) {
-        for(let i = 0; i < this.todos.length; i++){
-          if(this.todos[i].id === id) this.todos.splice(i, 1);
+        for(let i = 0; i < this.notes.length; i++){
+          if(this.notes[i].id === id) {
+            this.notes.splice(i, 1);
+            this.saveTodo();
+          }
           this.itemId = undefined;
           this.accept = false;
         }
@@ -74,6 +48,10 @@ export default {
         this.accept = !this.accept;
         this.itemId = id;
       }
+    },
+    saveTodo: function() {
+      const parse = JSON.stringify(this.notes);
+      localStorage.setItem('notes', parse);
     }
   },
   computed: {
@@ -88,15 +66,15 @@ export default {
       }
     }
   },
+  mounted() {
+    if (localStorage.getItem('notes')) {
+      try {
+        this.notes = JSON.parse(localStorage.getItem('notes'))
+      } catch (e) {
+        localStorage.removeItem('notes')
+      }
+    }
+  }
 }
 </script>
 
-<style lang="scss">
-.todo-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  margin: 0 auto;
-  flex-wrap: wrap;
-}
-</style>
