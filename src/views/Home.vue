@@ -28,30 +28,21 @@ export default {
   data() {
     return {
       accept: false,
-      itemId: undefined,
-      notes: [],
+      notes: this.$store.getters.NOTES,
+      itemId: undefined
     }
   },
   methods: {
     // Удаление заметки
     deleteItem: function(id) {
       if(this.accept) {
-        for(let i = 0; i < this.notes.length; i++){
-          if(this.notes[i].id === id) {
-            this.notes.splice(i, 1);
-            this.saveTodo();
-          }
-          this.itemId = undefined;
-          this.accept = false;
-        }
+        this.$store.commit('DELETE_TODO', id);
+        this.itemId = undefined;
+        this.accept = false;
       } else {
         this.accept = !this.accept;
         this.itemId = id;
       }
-    },
-    saveTodo: function() {
-      const parse = JSON.stringify(this.notes);
-      localStorage.setItem('notes', parse);
     }
   },
   computed: {
@@ -66,15 +57,6 @@ export default {
       }
     }
   },
-  mounted() {
-    if (localStorage.getItem('notes')) {
-      try {
-        this.notes = JSON.parse(localStorage.getItem('notes'))
-      } catch (e) {
-        localStorage.removeItem('notes')
-      }
-    }
-  }
 }
 </script>
 
