@@ -8,6 +8,7 @@ html, body {
 
 .main-header-container {
     background-color: #343436;
+    margin-bottom: 20px;
   }
   
   .main-header {
@@ -17,9 +18,14 @@ html, body {
     justify-content: space-between;
     align-items: center;
   
-    & > h1 {
+    & a {
       font-family: 'Roboto Condensed', sans-serif;
       color: #f3f3f3;
+      text-decoration: none;
+
+      &:hover {
+          color: #fff;
+      }
     }
   
     & > button {
@@ -43,6 +49,10 @@ html, body {
       }
     }
   }
+
+.edit-container {
+    margin: 0 auto;
+}
 
 .todo-container {
     display: flex;
@@ -90,6 +100,36 @@ html, body {
             & .ready-item-true {
                 border: 2px solid #426520;
             }
+        }
+    }
+}
+
+.list-items {
+    list-style: none;
+    padding-left: 0;
+
+    & > li {
+        padding-bottom: 5px;
+        color: #939395;
+        display: flex;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+
+        & .ready-item {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #3b3b3d;
+            border-radius: 50%;
+            margin-right: 7px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        & .ready-item-true {
+            border: 2px solid #426520;
         }
     }
 }
@@ -234,13 +274,64 @@ html, body {
     color: #afafb0;
 }
 
+.edit-block {
+    background-color: #333335;
+    padding: 18px 18px 18px 25px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    font-family: "Roboto Condensed", sans-serif;
+    color: #f3f3f3;
+
+    & *{
+        outline: none;
+    }
+}
+
+.save-button {
+    font-size: 16px;
+}
+
+.add-todo-edit {
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+}
+
+.add-button {
+    border-radius: 50%;
+    font-size: 21px;
+    margin-left: 10px;
+
+    &:hover {
+        box-shadow: 3px 3px 10px #232323;
+    }
+}
+
+.input-todo-add {
+    width: auto;
+}
+
+.cart-delete {
+    font-size: 14px;
+    font-weight: 300;
+    margin-left: 10px;
+    color: #6b6b6d;
+    transition: 0.7s all;
+
+    &:hover {
+        cursor: pointer;
+        color: #fc5b11;
+    }
+}
 @media (max-width: 540px) {
     html, body {
         zoom: 100%;
     }
 
     .main-header,
-    .todo-container {
+    .todo-container,
+    .edit-container {
         width: 95%;
         margin: 0 2.5%;
     }
@@ -256,7 +347,8 @@ html, body {
 
 @media (min-width: 540px) and (max-width: 720px) {
     .main-header,
-    .todo-container {
+    .todo-container,
+    .edit-container {
         width: 95%;
         margin: 0 2.5%;
     }
@@ -268,7 +360,8 @@ html, body {
 
 @media (min-width: 720px) and (max-width: 960px) {
     .main-header,
-    .todo-container {
+    .todo-container,
+    .edit-container {
         width: 95%;
         margin: 0 2.5%;
     }
@@ -276,7 +369,8 @@ html, body {
 
 @media (min-width: 960px) {
     .main-header,
-    .todo-container {
+    .todo-container,
+    .edit-container {
         width: 960px;
     }
 }

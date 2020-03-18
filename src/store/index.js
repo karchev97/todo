@@ -10,7 +10,7 @@ export default new Vuex.Store({
   getters: {
     NOTES: state => {
       return state.notes
-    }
+    },
   },
   mutations: {
     DELETE_TODO: (state, id) => {
@@ -22,12 +22,27 @@ export default new Vuex.Store({
         }
       }
     },
-    // ADD_TODO: (state, obj) => {
-
+    ADD_TODO: (state, obj) => {
+      state.notes.push(obj);
+      const parse = JSON.stringify(state.notes);
+      localStorage.setItem('notes', parse);
+    },
+    // READY_ITEM: (state, obj) => {
+    //   for(let i = 0; i < state.notes.length; i++) {
+    //     if(state.notes[i].id === obj.id) {
+    //       for(let x = 0; x < state.notes[i].items.length; x++) {
+    //         if(state.notes[i].items[x].id == obj.item) {
+    //           state.notes[i].items[x].ready = !state.notes[i].items[x].ready;
+    //         }
+    //       }
+    //     }
+    //   }
+    //   const parse = JSON.stringify(state.notes);
+    //   localStorage.setItem('notes', parse);
     // }
   },
   actions: {
-    
+
   },
   modules: {
   }

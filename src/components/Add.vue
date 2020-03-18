@@ -1,6 +1,6 @@
 <template>
     <div class="create-todo">
-        <div class="blur-add " v-if="isShow" @click="$emit('close-modal', false)"></div>
+        <div class="blur-add " v-if="showModal" @click="$emit('close-modal', false)"></div>
         <div class="modal-close" :style="topOffset">
         <h3>Добавление новой заметки</h3>
         <form onsubmit="return false">
@@ -34,6 +34,7 @@ export default {
                 {title: ''}
             ],
             notes: this.$store.getters.NOTES,
+            showModal: this.isShow
         }
     },
     methods: {
@@ -50,7 +51,7 @@ export default {
                 let items = [];
                 
                 for (let i = 0; i < this.items.length; i++) {
-                    let id = i;
+                    let id = '_' + Math.random().toString(36).substr(2, 9);
                     let ready = false;
                     let text = this.items[i].title; 
 
@@ -59,13 +60,12 @@ export default {
                 let todoObj = { id: id, title: this.todoTitle, items: items };
                 this.$store.commit('ADD_TODO', todoObj);
                 this.saveTodo();
+                this.$emit('change-is');
             }
         },
         saveTodo: function() {
-            const parse = JSON.stringify(this.notes);
-            localStorage.setItem('notes', parse);
             this.clearTodos();
-            this.isShow = false;
+            this.showModal = false;
         },
         clearTodos: function() {
             this.todoTitle = '';
@@ -80,8 +80,13 @@ export default {
         },
         topOffset: function() {
             return {
-                top: this.isShow ? '25px' : '-400px'
+                top: this.showModal ? '25px' : '-400px'
             }
+        },
+    },
+    watch: {
+        isShow: function() {
+            this.showModal = this.isShow
         }
     }
 }
