@@ -27,19 +27,13 @@ export default new Vuex.Store({
       const parse = JSON.stringify(state.notes);
       localStorage.setItem('notes', parse);
     },
-    // READY_ITEM: (state, obj) => {
-    //   for(let i = 0; i < state.notes.length; i++) {
-    //     if(state.notes[i].id === obj.id) {
-    //       for(let x = 0; x < state.notes[i].items.length; x++) {
-    //         if(state.notes[i].items[x].id == obj.item) {
-    //           state.notes[i].items[x].ready = !state.notes[i].items[x].ready;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   const parse = JSON.stringify(state.notes);
-    //   localStorage.setItem('notes', parse);
-    // }
+    SAVE_CHANGES: (state, obj) => {
+      for(let i = 0; i < state.notes.length; i++) {
+        if(state.notes[i].id === obj.id) {
+          state.notes[i] = obj;
+        }
+      }
+    }
   },
   actions: {
 

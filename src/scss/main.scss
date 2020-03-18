@@ -195,6 +195,11 @@ html, body {
     }
 }
 
+.modal-close-ok > h3 {
+    margin: 0;
+    color: #8bcf48;
+}
+
 .button-modal {
     padding: 5px 12px;
     font-size: 16px;
@@ -233,6 +238,16 @@ html, body {
     &:focus {
         border-bottom: 1px solid #757576;
     }
+}
+
+.input-edit {
+    display: block;
+    width: 100%;
+    border: 0;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #f3f3f3;
+    outline: none;
+    background-color: inherit;
 }
 
 .container-items {
