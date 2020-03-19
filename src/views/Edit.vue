@@ -13,12 +13,14 @@
                     class="input-edit" type="text" 
                     v-model="item.text" 
                     style="display:inline; font-size: 20px; width: auto; color: #6b6b6d;"
-                    @input="checkValue(item.text)">
+                    @input="checkValue(item.text)"
+                    :class="{errorInput: !item.text}">
 
                     <input 
                     v-else class="input-edit" type="text" 
                     v-model="item.text" style="display:inline; font-size: 20px; width: auto;"
-                    @input="checkValue()">
+                    @input="checkValue(item.text)"
+                    :class="{errorInput: !item.text}">
                     <span class="cart-delete" @click="deleteItem(item.id)">Удалить</span>
                 </li>
             </ul>
@@ -32,10 +34,17 @@
                 :class="{errorInput: isError}">
                 <button type="submit" class="button-modal none add-button" @click="addNewItem()">+</button>
             </form>
-            <button type="button" class="button-modal yeah save-button" @click="saveChanges()">Сохранить изменения</button>
+            <button type="button" class="button-modal yeah save-button" @click="saveChanges()" :disabled="emptyField">Сохранить изменения</button>
             <button type="button" class="button-modal none save-button" @click="cancelChange()" v-if="showCancel">Отменить изменения</button>
             <button type="button" class="button-modal none save-button" @click="repeatChange()" v-if="showRepeat">Повторить изменения</button>
         </div>
+
+        <!-- Модальные окна -->
+        <div class="blur" :style="isDisplay" @click="infoModal = !infoModal"></div>
+        <div class="modal-close modal-close-ok" :style="topMargin">
+            <img src="../assets/accept.svg" alt="ok" width="30px"><h3>Заметка сохранена</h3>
+        </div>
+
         <div class="blur" :style="isDisplay" @click="infoModal = !infoModal"></div>
         <div class="modal-close modal-close-ok" :style="topMargin">
             <img src="../assets/accept.svg" alt="ok" width="30px"><h3>Заметка сохранена</h3>
@@ -65,6 +74,7 @@ export default {
             isError: false,
             delModal: false,
             accept: false,
+            emptyField: false
         }
     },
     methods: {
@@ -127,7 +137,11 @@ export default {
             this.showRepeat = false;
         },
         checkValue: function(text) {
-            if(text == '') console.log(this)
+            if(text == '') {
+                this.emptyField = true;
+            } else {
+                this.emptyField = false;
+            }
         },
         deleteNote: function() {
             this.$store.commit('DELETE_TODO', this.id);
