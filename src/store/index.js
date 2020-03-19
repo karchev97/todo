@@ -33,6 +33,8 @@ export default new Vuex.Store({
           state.notes[i] = obj;
         }
       }
+      const parse = JSON.stringify(state.notes);
+      localStorage.setItem('notes', parse);
     }
   },
   actions: {

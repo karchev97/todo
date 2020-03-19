@@ -339,6 +339,11 @@ html, body {
         color: #fc5b11;
     }
 }
+
+.errorInput {
+    border: 1px solid red;
+}
+
 @media (max-width: 540px) {
     html, body {
         zoom: 100%;

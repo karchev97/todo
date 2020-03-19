@@ -8,16 +8,28 @@
                         :class="[{'ready-item-true': item.ready}, 'ready-item']"
                         @click="readyItem(item.id)"
                         ></div>
-                    <input v-if="item.ready" class="input-edit" type="text" v-model="item.text" style="display:inline; font-size: 20px; width: auto; color: #6b6b6d;">
-                    <input v-else class="input-edit" type="text" v-model="item.text" style="display:inline; font-size: 20px; width: auto;">
+                    <input 
+                    v-if="item.ready" 
+                    class="input-edit" type="text" 
+                    v-model="item.text" 
+                    style="display:inline; font-size: 20px; width: auto; color: #6b6b6d;"
+                    @input="checkValue(item.text)">
+
+                    <input 
+                    v-else class="input-edit" type="text" 
+                    v-model="item.text" style="display:inline; font-size: 20px; width: auto;"
+                    @input="checkValue()">
                     <span class="cart-delete" @click="deleteItem(item.id)">Удалить</span>
                 </li>
             </ul>
-            <div class="delete-todo" style="right: 15px;" >
+            <div class="delete-todo" style="right: 15px;" @click="delModal = !delModal">
                 <img src="../assets/bin.svg" alt="Удалить" width="100%">
             </div>
             <form onsubmit="return false" class="add-todo-edit">
-                <input type="text" class="input-todo input-todo-add" v-model="item" placeholder="Название пункта" required>
+                <input 
+                type="text" class="input-todo input-todo-add" 
+                v-model="item" placeholder="Название пункта" 
+                :class="{errorInput: isError}">
                 <button type="submit" class="button-modal none add-button" @click="addNewItem()">+</button>
             </form>
             <button type="button" class="button-modal yeah save-button" @click="saveChanges()">Сохранить изменения</button>
@@ -27,6 +39,13 @@
         <div class="blur" :style="isDisplay" @click="infoModal = !infoModal"></div>
         <div class="modal-close modal-close-ok" :style="topMargin">
             <img src="../assets/accept.svg" alt="ok" width="30px"><h3>Заметка сохранена</h3>
+        </div>
+
+        <div class="blur" :style="isDisplayDel" @click="delModal = !delModal"></div>
+        <div class="modal-close" :style="topMarginDel">
+            <h3>Хотите удалить данную заметку?</h3>
+            <button class="button-modal yeah" @click="deleteNote()">Да</button>
+            <button class="button-modal none" @click="delModal = !delModal">Нет</button>
         </div>
     </div>
 </template>
@@ -38,11 +57,14 @@ export default {
             id: this.$route.params.id,
             note: {},
             noteCopy: {},
-            notes: this.$store.getters.NOTES,
+            notes: [],
             item: '',
             showCancel: false,
             showRepeat: false,
-            infoModal: false
+            infoModal: false,
+            isError: false,
+            delModal: false,
+            accept: false,
         }
     },
     methods: {
@@ -55,10 +77,16 @@ export default {
             this.showButtons();
         },
         addNewItem: function() {
-            let id = '_' + Math.random().toString(36).substr(2, 9);
-            this.note.items.push({id: id, ready: false, text: this.item});
-            this.item = '';
-            this.showButtons();
+            if(this.item) {
+                let id = '_' + Math.random().toString(36).substr(2, 9);
+                this.note.items.push({id: id, ready: false, text: this.item});
+                this.item = '';
+                this.showButtons();
+                this.isError = false;
+            } else {
+                this.isError = true;
+                return false;
+            }
         },
         deleteItem: function(id) {
             for(let i = 0; i < this.note.items.length; i++) {
@@ -95,9 +123,21 @@ export default {
             setTimeout(() => {
                 this.infoModal = false
             }, 4000);
+            this.showCancel = false;
+            this.showRepeat = false;
+        },
+        checkValue: function(text) {
+            if(text == '') console.log(this)
+        },
+        deleteNote: function() {
+            this.$store.commit('DELETE_TODO', this.id);
+            this.delModal = false;
+            this.accept = false;
+            this.$router.push('/');
         }
     },
     created() {
+        this.notes = JSON.parse(localStorage.getItem('notes'));
         for(let i = 0; i < this.notes.length; i++) {
             if(this.notes[i].id == this.id) {
                 this.note = this.notes[i];
@@ -105,16 +145,27 @@ export default {
         }
     },
     computed: {
-    isDisplay: function() {
-      return {
-        display: this.infoModal ? 'block' : 'none'
-      }
+        isDisplay: function() {
+            return {
+                display: this.infoModal ? 'block' : 'none'
+            }
+        },
+        topMargin: function() {
+            return {
+                top: this.infoModal ? '25px' : '-400px'
+            }
+        },
+        isDisplayDel: function() {
+            return {
+                display: this.delModal ? 'block' : 'none'
+            }
+        },
+        topMarginDel: function() {
+            return {
+                top: this.delModal ? '25px' : '-400px'
+            }
+        },
+        
     },
-    topMargin: function() {
-      return {
-        top: this.infoModal ? '25px' : '-400px'
-      }
-    }
-  },
 }
 </script>

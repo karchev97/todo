@@ -30,11 +30,5 @@ import Add from './components/Add'
         this.isShow = bool
       }
     },
-    watch: {
-      isShow: function() {
-        console.log(this.isShow)
-      }
-    }
-    
   }
 </script>

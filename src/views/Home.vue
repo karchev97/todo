@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       accept: false,
-      notes: this.$store.getters.NOTES,
+      notes:  this.$store.getters.NOTES,
       itemId: undefined
     }
   },
