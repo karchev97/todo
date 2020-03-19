@@ -1,7 +1,9 @@
 <template>
     <div class="edit-container">
         <div class="edit-block">
-            <input class="input-edit" style="font-size: 32px; font-weight: 700;" type="text" v-model="note.title" @input="showButtons()">
+            <input class="input-edit" style="font-size: 32px; font-weight: 700;" 
+            type="text" v-model="note.title" :class="{errorInput: !note.title}" 
+            @input="showButtons(note.title)">
             <ul class="list-items">
                 <li v-for="item in note.items" :key="item.id">
                     <div 
@@ -10,14 +12,14 @@
                         ></div>
                     <input 
                     v-if="item.ready" 
-                    class="input-edit" type="text" 
+                    class="input-edit input-edit-small" type="text" 
                     v-model="item.text" 
                     style="display:inline; font-size: 20px; width: auto; color: #6b6b6d;"
                     @input="checkValue(item.text)"
                     :class="{errorInput: !item.text}">
 
                     <input 
-                    v-else class="input-edit" type="text" 
+                    v-else class="input-edit input-edit-small" type="text" 
                     v-model="item.text" style="display:inline; font-size: 20px; width: auto;"
                     @input="checkValue(item.text)"
                     :class="{errorInput: !item.text}">
@@ -40,11 +42,6 @@
         </div>
 
         <!-- Модальные окна -->
-        <div class="blur" :style="isDisplay" @click="infoModal = !infoModal"></div>
-        <div class="modal-close modal-close-ok" :style="topMargin">
-            <img src="../assets/accept.svg" alt="ok" width="30px"><h3>Заметка сохранена</h3>
-        </div>
-
         <div class="blur" :style="isDisplay" @click="infoModal = !infoModal"></div>
         <div class="modal-close modal-close-ok" :style="topMargin">
             <img src="../assets/accept.svg" alt="ok" width="30px"><h3>Заметка сохранена</h3>
@@ -78,16 +75,18 @@ export default {
         }
     },
     methods: {
-        readyItem: function(item) {
-            for(let i = 0; i < this.note.items.length; i++) {
-                if(this.note.items[i].id == item) {
+        // Метод отслеживающий переключатель 'чекбокса' определенного пункта
+        readyItem: function (item) {
+            for (let i = 0; i < this.note.items.length; i++) {
+                if (this.note.items[i].id == item) {
                     this.note.items[i].ready = !this.note.items[i].ready;
                 }
             }
             this.showButtons();
         },
-        addNewItem: function() {
-            if(this.item) {
+        // Метод добавления нового пункта к заметке
+        addNewItem: function () {
+            if (this.item) {
                 let id = '_' + Math.random().toString(36).substr(2, 9);
                 this.note.items.push({id: id, ready: false, text: this.item});
                 this.item = '';
@@ -98,36 +97,43 @@ export default {
                 return false;
             }
         },
-        deleteItem: function(id) {
-            for(let i = 0; i < this.note.items.length; i++) {
-                if(this.note.items[i].id == id) {
+        // Метод удаления пункта заметки
+        deleteItem: function (id) {
+            for (let i = 0; i < this.note.items.length; i++) {
+                if (this.note.items[i].id == id) {
                     this.note.items.splice(i, 1);
                 }
             }
             this.showButtons();
         },
-        cancelChange: function() {
+        // Метод регулирующий отмену внесенных изменений
+        cancelChange: function () {
             const parse = JSON.stringify(this.note);
             localStorage.setItem('note', parse);
+
             this.note = {};
             this.notes = JSON.parse(localStorage.getItem('notes'));
-            for(let i = 0; i < this.notes.length; i++) {
-                if(this.notes[i].id == this.id) {
+            for (let i = 0; i < this.notes.length; i++) {
+                if (this.notes[i].id == this.id) {
                     this.note = this.notes[i];
                 }
             }
             this.showCancel = false;
             this.showRepeat = true;
         },
-        repeatChange: function() {
+        // Метод регулирущий повтор изменений
+        repeatChange: function () {
             this.note = JSON.parse(localStorage.getItem('note'));
             this.showButtons();
         },
-        showButtons: function() {
+        // Метод отображеия кнопок "Отменить изменения" и "Повторить изменения"
+        showButtons: function (title) {
             this.showCancel = true;
             this.showRepeat = false;
+            this.checkValue(title);
         },
-        saveChanges: function() {
+        // Метод сохранения изменений в заметке
+        saveChanges: function () {
             this.$store.commit('SAVE_CHANGES', this.note);
             this.infoModal = true;
             setTimeout(() => {
@@ -136,14 +142,16 @@ export default {
             this.showCancel = false;
             this.showRepeat = false;
         },
-        checkValue: function(text) {
-            if(text == '') {
+        // Метод проверки на пустые поля
+        checkValue: function (text) {
+            if (text == '') {
                 this.emptyField = true;
             } else {
                 this.emptyField = false;
             }
         },
-        deleteNote: function() {
+        // Метод удаления заметки
+        deleteNote: function () {
             this.$store.commit('DELETE_TODO', this.id);
             this.delModal = false;
             this.accept = false;
@@ -152,29 +160,30 @@ export default {
     },
     created() {
         this.notes = JSON.parse(localStorage.getItem('notes'));
-        for(let i = 0; i < this.notes.length; i++) {
-            if(this.notes[i].id == this.id) {
+        for (let i = 0; i < this.notes.length; i++) {
+            if (this.notes[i].id == this.id) {
                 this.note = this.notes[i];
             }
         }
     },
     computed: {
-        isDisplay: function() {
+        // Различные методы, отвечающие за стили элементов
+        isDisplay: function () {
             return {
                 display: this.infoModal ? 'block' : 'none'
             }
         },
-        topMargin: function() {
+        topMargin: function () {
             return {
                 top: this.infoModal ? '25px' : '-400px'
             }
         },
-        isDisplayDel: function() {
+        isDisplayDel: function () {
             return {
                 display: this.delModal ? 'block' : 'none'
             }
         },
-        topMarginDel: function() {
+        topMarginDel: function () {
             return {
                 top: this.delModal ? '25px' : '-400px'
             }

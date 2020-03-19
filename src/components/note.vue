@@ -31,12 +31,8 @@ export default {
             isHover: false
         }
     },
-    methods: {
-        deleteItem: function(id) {
-            console.log(id)
-        }
-    },
     computed: {
+        // Различные методы, отвечающие за стили элементов
         rightMarg: function() {
             return {
                 right: this.isHover ? '15px' : '-55px'

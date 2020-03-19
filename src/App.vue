@@ -26,9 +26,11 @@ import Add from './components/Add'
       }
     },
     methods: {
-      closeModal: function(bool) {
+      // метод закрытия модального окна
+      closeModal: function (bool) {
         this.isShow = bool
       }
     },
   }
+  
 </script>

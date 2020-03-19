@@ -213,6 +213,7 @@ html, body {
 
 .yeah {
     margin-right: 7px;
+    background-color: #fff;
 }
 
 .none{
@@ -362,6 +363,15 @@ html, body {
 
     .modal-close {
         width: 260px;
+    }
+
+    .input-edit-small {
+        max-width: 100px;
+    }
+
+    .save-button {
+        width: 100%;
+        margin-bottom: 10px;
     }
 }
 

@@ -38,13 +38,16 @@ export default {
         }
     },
     methods: {
-        deleteItem: function(index) {
+        // Метод удаления пункта
+        deleteItem: function (index) {
             this.items.splice(index, 1)
         },
-        addItem: function() {
+        // Метод добавления пункта
+        addItem: function () {
             this.items.push({title: ''})
         },
-        addTodo: function() {
+        // Метод добавления заметки
+        addTodo: function () {
             // генерируем id
             if (this.todoTitle && this.items[0].title != '') {
                 let id = `f${(+new Date).toString(16)}`;
@@ -63,29 +66,32 @@ export default {
                 this.$emit('change-is');
             }
         },
-        saveTodo: function() {
+        // Метод сохранения заметки 
+        saveTodo: function () {
             this.clearTodos();
             this.showModal = false;
         },
-        clearTodos: function() {
+        // Метод, очищающий необходимые служебные переменные
+        clearTodos: function () {
             this.todoTitle = '';
             this.items = [{title: ''}];
         }
     },
     computed: {
-        widthInput: function() {
+        // Различные методы, отвечающие за стили элементов
+        widthInput: function () {
             return {
                 width: this.items.length > 1 ? 'auto' : '100%'
             }
         },
-        topOffset: function() {
+        topOffset: function () {
             return {
                 top: this.showModal ? '25px' : '-400px'
             }
         },
     },
     watch: {
-        isShow: function() {
+        isShow: function () {
             this.showModal = this.isShow
         }
     }

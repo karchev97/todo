@@ -33,9 +33,9 @@ export default {
     }
   },
   methods: {
-    // Удаление заметки
-    deleteItem: function(id) {
-      if(this.accept) {
+    // Метод удаления заметки
+    deleteItem: function (id) {
+      if (this.accept) {
         this.$store.commit('DELETE_TODO', id);
         this.itemId = undefined;
         this.accept = false;
@@ -46,12 +46,13 @@ export default {
     }
   },
   computed: {
-    isDisplay: function() {
+    // Различные методы, отвечающие за стили элементов
+    isDisplay: function () {
       return {
         display: this.accept ? 'block' : 'none'
       }
     },
-    topMargin: function() {
+    topMargin: function () {
       return {
         top: this.accept ? '25px' : '-400px'
       }
