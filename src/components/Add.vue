@@ -5,7 +5,7 @@
         <h3>Добавление новой заметки</h3>
         <form onsubmit="return false">
             <h4 class="title-form">Название заметки</h4>
-            <input type="text" class="input-todo" v-model="todoTitle" placeholder="Название заметки" required>
+            <input type="text" class="input-todo" v-model="todoTitle" placeholder="Название заметки" required autofocus>
             <h4 class="title-form">Пункты</h4>
             <div class="container-items" v-for="(item, index) in items" :key="index">
                 <input type="text" class="input-todo input-todo-item" v-model="item.title" :style="widthInput" placeholder="Название пункта" required>

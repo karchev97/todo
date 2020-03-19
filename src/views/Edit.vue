@@ -37,6 +37,7 @@
                 <button type="submit" class="button-modal none add-button" @click="addNewItem()">+</button>
             </form>
             <button type="button" class="button-modal yeah save-button" @click="saveChanges()" :disabled="emptyField">Сохранить изменения</button>
+            <button type="button" class="button-modal none save-button" @click="chModal = !chModal" style="margin-right: 7px;">Отменить редактирование</button>
             <button type="button" class="button-modal none save-button" @click="cancelChange()" v-if="showCancel">Отменить изменения</button>
             <button type="button" class="button-modal none save-button" @click="repeatChange()" v-if="showRepeat">Повторить изменения</button>
         </div>
@@ -52,6 +53,13 @@
             <h3>Хотите удалить данную заметку?</h3>
             <button class="button-modal yeah" @click="deleteNote()">Да</button>
             <button class="button-modal none" @click="delModal = !delModal">Нет</button>
+        </div>
+
+        <div class="blur" :style="isDisplayCh" @click="chModal = !chModal"></div>
+        <div class="modal-close" :style="topMarginCh">
+            <h3>Отменить редактирование?</h3>
+            <router-link to='/' class="button-modal yeah" @click="chModal = !chModal">Да</router-link>
+            <button class="button-modal none" @click="chModal = !chModal">Нет</button>
         </div>
     </div>
 </template>
@@ -71,7 +79,8 @@ export default {
             isError: false,
             delModal: false,
             accept: false,
-            emptyField: false
+            emptyField: false,
+            chModal: false
         }
     },
     methods: {
@@ -186,6 +195,16 @@ export default {
         topMarginDel: function () {
             return {
                 top: this.delModal ? '25px' : '-400px'
+            }
+        },
+        isDisplayCh: function () {
+            return {
+                display: this.chModal ? 'block' : 'none'
+            }
+        },
+        topMarginCh: function () {
+            return {
+                top: this.chModal ? '25px' : '-400px'
             }
         },
         
