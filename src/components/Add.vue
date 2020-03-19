@@ -86,7 +86,7 @@ export default {
         },
         topOffset: function () {
             return {
-                top: this.showModal ? '25px' : '-400px'
+                top: this.showModal ? '25px' : '-900px'
             }
         },
     },

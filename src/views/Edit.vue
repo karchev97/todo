@@ -158,6 +158,7 @@ export default {
             } else {
                 this.emptyField = false;
             }
+            this.showButtons();
         },
         // Метод удаления заметки
         deleteNote: function () {

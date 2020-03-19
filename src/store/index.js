@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    notes: JSON.parse(localStorage.getItem('notes')),
+    notes: JSON.parse(localStorage.getItem('notes')) || [],
   },
   getters: {
     NOTES: state => {

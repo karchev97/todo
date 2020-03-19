@@ -8,7 +8,7 @@
       :items="todo.items"
       @delete-item="deleteItem($event)"
     />
-
+    <h1 v-if="notes.length == 0" class="no-notes">У вас нет ни одной заметки :(</h1>
     <div class="blur" :style="isDisplay" @click="accept = !accept"></div>
     <div class="modal-close" :style="topMargin">
       <h3>Хотите удалить данную заметку?</h3>
