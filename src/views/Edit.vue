@@ -3,7 +3,7 @@
         <div class="edit-block">
             <input class="input-edit" style="font-size: 32px; font-weight: 700;" 
             type="text" v-model="note.title" :class="{errorInput: !note.title}" 
-            @input="showButtons(note.title)">
+            @input="checkValue(note.title)">
             <ul class="list-items">
                 <li v-for="item in note.items" :key="item.id">
                     <div 
@@ -136,12 +136,9 @@ export default {
             this.showButtons();
         },
         // Метод отображеия кнопок "Отменить изменения" и "Повторить изменения"
-        showButtons: function (title) {
+        showButtons: function () {
             this.showCancel = true;
             this.showRepeat = false;
-            if (title) {
-                this.checkValue(title);
-            }
         },
         // Метод сохранения изменений в заметке
         saveChanges: function () {
@@ -155,7 +152,7 @@ export default {
         },
         // Метод проверки на пустые поля
         checkValue: function (text) {
-            if (text == '') {
+            if (text == '' || !text) {
                 this.emptyField = true;
             } else {
                 this.emptyField = false;

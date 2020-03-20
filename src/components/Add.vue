@@ -5,16 +5,18 @@
         <h3>Добавление новой заметки</h3>
         <form onsubmit="return false">
             <h4 class="title-form">Название заметки</h4>
-            <input type="text" class="input-todo" v-model="todoTitle" placeholder="Название заметки" required autofocus>
+            <input type="text" class="input-todo" @input="checkFrom()" v-model="todoTitle" placeholder="Название заметки" required>
             <h4 class="title-form">Пункты</h4>
             <div class="container-items" v-for="(item, index) in items" :key="index">
-                <input type="text" class="input-todo input-todo-item" v-model="item.title" :style="widthInput" placeholder="Название пункта" required>
+                <input type="text" class="input-todo input-todo-item" 
+                v-model="item.title" :style="widthInput" placeholder="Название пункта" 
+                @input="checkFrom(item.title)" required>
                 <button type="button" v-if="items.length > 1" class="delete-item" @click="deleteItem(index)">Удалить</button>
             </div>   
             <div class="container-center">
                 <button type="button" class="add-item" @click="addItem()">+ Добавить пункт</button>
             </div>
-            <button type="submit" class="button-modal yeah" @click="addTodo()">Готово</button>
+            <button type="submit" class="button-modal yeah" @click="addTodo()" :disabled="activeButton">Готово</button>
             <button type="button" class="button-modal none" @click="$emit('close-modal', false)">Отмена</button>
         </form>
         
@@ -34,17 +36,20 @@ export default {
                 {title: ''}
             ],
             notes: this.$store.getters.NOTES,
-            showModal: this.isShow
+            showModal: this.isShow,
+            activeButton: true
         }
     },
     methods: {
         // Метод удаления пункта
         deleteItem: function (index) {
-            this.items.splice(index, 1)
+            this.items.splice(index, 1);
+            this.checkFrom();
         },
         // Метод добавления пункта
         addItem: function () {
-            this.items.push({title: ''})
+            this.items.push({title: ''});
+            this.activeButton = true;
         },
         // Метод добавления заметки
         addTodo: function () {
@@ -75,6 +80,35 @@ export default {
         clearTodos: function () {
             this.todoTitle = '';
             this.items = [{title: ''}];
+        },
+        chackAllItems: function () {
+            for (let i = 0; i < this.items.length; i++) {
+                if (this.items[i].title == '') {
+                    this.activeButton = true;
+                    return false;
+                } else {
+                    this.activeButton = false;
+                }
+            }
+        },
+        checkFrom: function (titleItem) {
+            if (titleItem == '') {
+                this.activeButton = true;
+                return false;
+            }
+            if (titleItem) {
+                if (this.todoTitle == '') {
+                    this.activeButton = true;
+                } else {
+                    this.chackAllItems();
+                }
+            } else {
+                if (this.todoTitle == '') {
+                    this.activeButton = true;
+                } else {
+                    this.chackAllItems();
+                }
+            }
         }
     },
     computed: {
@@ -93,7 +127,7 @@ export default {
     watch: {
         isShow: function () {
             this.showModal = this.isShow
-        }
+        },
     }
 }
 </script>
