@@ -139,7 +139,9 @@ export default {
         showButtons: function (title) {
             this.showCancel = true;
             this.showRepeat = false;
-            this.checkValue(title);
+            if (title) {
+                this.checkValue(title);
+            }
         },
         // Метод сохранения изменений в заметке
         saveChanges: function () {

@@ -16,7 +16,6 @@
 import Add from './components/Add'
 
   export default {
-    name: 'app',
     components: {
       Add
     },
